@@ -5,6 +5,10 @@
 
 Caffeine is a tiny program that keeps your Mac awake, useful for ensuring that long running tasks aren't interrupted by your computer going to sleep.
 
+# NOTE
+
+This is a fork version. The Sparkle framework is removed. All network related features were disabled!
+
 ### Installation
 
 Download Caffeine at https://caffeine-app.net and drag it into your Applications folder, then double-click the icon to launch it.
