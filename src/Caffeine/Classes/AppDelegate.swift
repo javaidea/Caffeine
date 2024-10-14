@@ -7,10 +7,9 @@
 
 import Cocoa
 import IOKit.pwr_mgt
-import Sparkle
 
 @main
-class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, SPUStandardUserDriverDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     
     var isActive:Bool
     var userSessionIsActive:Bool
@@ -28,7 +27,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, SPUStandardU
     @IBOutlet var infoSeparatorItem:NSMenuItem!
     
     var preferencesWindowController:PreferencesWindowController!
-    var updaterController:SPUStandardUpdaterController!
     
     override init() {
         self.isActive = false
@@ -60,9 +58,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, SPUStandardU
         UserDefaults.standard.register(defaults: ["CASuppressLaunchMessage" : false])
         
         preferencesWindowController = PreferencesWindowController(windowNibName: "PreferencesWindowController")
-        updaterController = SPUStandardUpdaterController(startingUpdater: true,
-                                                         updaterDelegate: nil,
-                                                         userDriverDelegate: self);
         
         if !UserDefaults.standard.bool(forKey: "CASuppressLaunchMessage") {
             self.showPreferences(nil)
@@ -118,7 +113,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, SPUStandardU
     @IBAction func statusItemAction(_ sender:Any?) {
         let event = NSApp.currentEvent
         if event?.type == .rightMouseUp {
-            statusItem.popUpMenu(menu)
+            statusItem.menu = menu
+            statusItem.button?.performClick(nil)
+            statusItem.menu = nil
         } else {
             toggleActive(sender)
         }
@@ -150,11 +147,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, SPUStandardU
         NSApp.activate(ignoringOtherApps: true)
         preferencesWindowController.showWindow(self)
     }
-    
-    @IBAction func checkForUpdates(_ sender:Any?) {
-        updaterController.checkForUpdates(sender)
-    }
-    
     
     // MARK:  Public
     // MARK:  ---
